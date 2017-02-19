@@ -1,0 +1,97 @@
+﻿<Window x:Class="GuiBinConverter.DeDupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:GuiBinConverter"
+        Title="Устранение дубликатов в *.bin файлах тиков" Height="278.564" Width="526.661" 
+        xmlns:barCode="http://schemas.actiprosoftware.com/winfx/xaml/barcode" 
+        xmlns:ribbon="http://schemas.actiprosoftware.com/winfx/xaml/ribbon" 
+        Loaded="Window_Loaded" 
+        WindowStartupLocation="CenterScreen" 
+        ResizeMode="NoResize">
+    <Window.Resources>
+        <local:StrLengthToBool x:Key="StrLengthToBool"/>
+        <local:FileExistToBool x:Key="FileExistToBool"/>
+        <local:ObjectBooleanConverter x:Key="ObjectBooleanConverter"/>
+        <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <local:MultyConverter x:Key="MultyConverter"/>
+        <local:MultyConverter2 x:Key="MultyConverter2"/>
+
+    </Window.Resources>
+
+    <Grid Margin="0">
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="230.374" Margin="10,10,0,0" VerticalAlignment="Top" Width="500.05">
+            <Grid Margin="10,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="219.209" Width="479.05">
+                <Label Content="Список провайдеров данных" Height="24" HorizontalAlignment="Left" x:Name="label6" Padding="5,5,5,2" VerticalAlignment="Top" VerticalContentAlignment="Bottom" Width="245" IsEnabled="{Binding IsChecked, Converter={StaticResource InverseBooleanConverter}, ElementName=chbxFromFolder}"/>
+                <ComboBox Height="23" HorizontalAlignment="Left" Margin="0,24,0,0" x:Name="cbxDataProviders" VerticalAlignment="Top" Width="245" SelectionChanged="cbxDataProviders_SelectionChanged">
+                    <ComboBox.IsEnabled>
+                        <Binding Path="IsChecked" Converter="{StaticResource InverseBooleanConverter}" ElementName="chbxFromFolder" />
+                    </ComboBox.IsEnabled>
+                </ComboBox>
+                <Button Content="Обновить" Height="23" HorizontalAlignment="Left" Margin="250,24,0,0" x:Name="btnRefreshDataProviders" VerticalAlignment="Top" Width="75" Click="btnRefreshDataProviders_Click" IsEnabled="{Binding IsChecked, Converter={StaticResource InverseBooleanConverter}, ElementName=chbxFromFolder}"/>
+                <CheckBox Content="Выбрать данные из папки" Height="16" HorizontalAlignment="Left" x:Name="chbxFromFolder" VerticalAlignment="Top" Margin="0,58,0,0" />
+
+                <TextBox Height="23" HorizontalAlignment="Left" Margin="0,97,0,0" x:Name="tbxBinPath" VerticalAlignment="Top" Width="395" Text="%LOCALAPPDATA%\TSLab\TSLab12\Finam Forts newCacheTrades\" IsEnabled="{Binding IsChecked, ElementName=chbxFromFolder}" />
+                <Button Content="Выбрать ..." Height="23" HorizontalAlignment="Left" Margin="395,95,0,0" x:Name="btnBrowseBin" VerticalAlignment="Top" Width="75" Click="btnBrowseBin_Click" IsEnabled="{Binding IsChecked, ElementName=chbxFromFolder}" />
+                <Label Content="Путь к папке с *.bin файлами" Height="23" HorizontalAlignment="Left" Margin="0,74,0,0" x:Name="label1" VerticalAlignment="Top" Width="390" VerticalContentAlignment="Bottom" Padding="5,5,5,2" IsEnabled="{Binding IsChecked, ElementName=chbxFromFolder}"  />
+
+                <Label Content="Список тикеров" Height="23" HorizontalAlignment="Left" Margin="0,121,0,0" x:Name="label2" Padding="5,5,5,2" VerticalAlignment="Top" VerticalContentAlignment="Bottom" Width="120">
+                    <Label.IsEnabled>
+                        <MultiBinding Converter="{StaticResource MultyConverter}">
+                            <Binding ElementName="chbxFromFolder" Path="IsChecked" />
+                            <Binding ElementName="cbxDataProviders" Path="SelectedIndex" />
+                            <Binding ElementName="tbxBinPath" Path="Text" />
+                        </MultiBinding>
+                    </Label.IsEnabled>
+                </Label>
+                <ComboBox Height="23" HorizontalAlignment="Left" Margin="0,144,0,0" x:Name="cbxTickers" VerticalAlignment="Top" Width="120" SelectionChanged="CbxTickers_OnSelectionChanged">
+                    <ComboBox.IsEnabled>
+                        <MultiBinding Converter="{StaticResource MultyConverter}">
+                            <Binding ElementName="chbxFromFolder" Path="IsChecked" />
+                            <Binding ElementName="cbxDataProviders" Path="SelectedIndex" />
+                            <Binding ElementName="tbxBinPath" Path="Text" />
+                        </MultiBinding>
+                    </ComboBox.IsEnabled>
+                </ComboBox>
+                <Button Content="Загрузить тикеры" Height="23" HorizontalAlignment="Left" Margin="125,144,0,0" x:Name="btnLoadBinTickers" VerticalAlignment="Top" Width="100" Click="btnLoadBinTickers_Click">
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{StaticResource MultyConverter}">
+                            <Binding ElementName="chbxFromFolder" Path="IsChecked" />
+                            <Binding ElementName="cbxDataProviders" Path="SelectedIndex" />
+                            <Binding ElementName="tbxBinPath" Path="Text" />
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
+                <Button Content="DeDup" Height="23" HorizontalAlignment="Left" Margin="0,172,0,0" x:Name="btnDeDup" VerticalAlignment="Top" Width="75" Click="btnDeDup_Click">
+                    <Button.IsEnabled>
+                        <Binding Path="SelectedItem" Converter="{StaticResource ObjectBooleanConverter}" ElementName="cbxTickers" />
+                    </Button.IsEnabled>
+                </Button>
+                <ProgressBar Height="23" HorizontalAlignment="Left" Margin="81,172,0,0" x:Name="prgbBin2Txt" VerticalAlignment="Top" Width="389" />
+
+                <Label Content="От" Height="23" HorizontalAlignment="Left" Margin="255,120,0,0" x:Name="label10" Padding="5,5,5,2" VerticalAlignment="Top" VerticalContentAlignment="Bottom" Width="100">
+                    <Label.IsEnabled>
+                        <Binding Path="SelectedItem" Converter="{StaticResource ObjectBooleanConverter}" ElementName="cbxTickers" />
+                    </Label.IsEnabled>
+                </Label>
+                <Label Content="До" Height="23" HorizontalAlignment="Left" Margin="370,121,0,0" x:Name="label11" Padding="5,5,5,2" VerticalAlignment="Top" VerticalContentAlignment="Bottom" Width="98">
+                    <Label.IsEnabled>
+                        <Binding Path="SelectedItem" Converter="{StaticResource ObjectBooleanConverter}" ElementName="cbxTickers" />
+                    </Label.IsEnabled>
+                </Label>
+                <DatePicker Name="dpFrom" Height="23" Width="100" HorizontalAlignment="Left" Margin="255,144,0,0" VerticalAlignment="Top" FirstDayOfWeek="Monday" SelectedDateFormat="Short">
+                    <DatePicker.IsEnabled>
+                        <Binding Path="SelectedItem" Converter="{StaticResource ObjectBooleanConverter}" ElementName="cbxTickers" />
+                    </DatePicker.IsEnabled>
+                </DatePicker>
+                <DatePicker Name="dpTo" Height="23" Width="100" HorizontalAlignment="Left" Margin="370,144,0,0" VerticalAlignment="Top" FirstDayOfWeek="Monday" SelectedDateFormat="Short">
+                    <DatePicker.IsEnabled>
+                        <Binding Path="SelectedItem" Converter="{StaticResource ObjectBooleanConverter}" ElementName="cbxTickers" />
+                    </DatePicker.IsEnabled>
+                </DatePicker>
+                <Label x:Name="lblTickProcessStatus" Content="Выбирайте данные, загрузите тикеры и жмите DeDup" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Bottom" Width="468" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            </Grid>
+
+        </Border>
+
+    </Grid>
+</Window>

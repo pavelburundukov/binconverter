@@ -1,0 +1,14 @@
+﻿<Window x:Class="GuiBinConverter.Selector"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Выбор режима" Height="150.911" Width="326.327" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid Margin="5,5,5,5">
+        <Label Content="Выбирайте с какими данными будем работать" HorizontalAlignment="Center" Margin="10,9,10,0" VerticalAlignment="Top" Width="246.126" Height="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Button Name="btnTicks" Content="Тики" HorizontalAlignment="Left" Margin="29,37,0,0" VerticalAlignment="Top" Width="75" Click="BtnTicks_Click" Height="21" ToolTip="Конвертация тиков  *.bin -&gt; *.trd и обратно"/>
+        <Button Name="btnBars" Content="Свечи" HorizontalAlignment="Right" Margin="0,37,29,0" VerticalAlignment="Top" Width="75" Click="BtnBars_Click" Height="21" ToolTip="Конвертация баров *.bin -&gt; *.bar и обратно"/>
+        <TextBlock  Height="18" Width="246.126" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10,0" TextAlignment="Center" >
+            <Hyperlink NavigateUri="http://rusalgo.com" RequestNavigate="Hyperlink_OnRequestNavigate">http://rusalgo.com</Hyperlink>
+        </TextBlock>
+        <Button x:Name="btnTicks_Copy" Content="DeDup" HorizontalAlignment="Left" Margin="29,63,0,0" VerticalAlignment="Top" Width="75" Click="BtnDeDup_Click" Height="21" ToolTip="Устранение дубликатов в *.bin файлах тиков"/>
+    </Grid>
+</Window>
